@@ -32,3 +32,5 @@ def create_app():
     app.register_blueprint(data_blueprint)
 
     return app
+
+app = create_app()
