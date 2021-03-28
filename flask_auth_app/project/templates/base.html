@@ -25,6 +25,9 @@
 							<a href="{{ url_for('main.profile') }}" class="navbar-item">
 								Profile
 							</a>
+							<a href="{{ url_for('data.index') }}" class="navbar-item">
+								Data
+							</a>
 							{% endif %}
 
 							{% if not current_user.is_authenticated %}

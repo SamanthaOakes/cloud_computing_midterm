@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="title">
+	Data Visualization
+</h1>
+<h2 class="subtitle">
+	Data information for Cloud Computing Midterm
+	<br/>
+	Data hosted & visualized via Metabase Azure webapp
+</h2>
+<h1 class="title">
+	Question 5
+</h1>
+<h2 class="subtitle">
+	Data Pull for Hshd_num 5
+</h2>
+<iframe
+    src="http://midterm-site.azurewebsites.net/public/dashboard/7a2b38d8-562c-44cf-9887-af9a769134b3"
+    frameborder="0"
+    width="1200"
+    height="650"
+    allowtransparency
+></iframe>
+<h1 class="title">
+	Question 6
+</h1>
+<h2 class="subtitle">
+	To conceptualize “time”, we categorized the data into seasons. Additionally, since the data spanned more than a year, we associated a year with each season. Seasons range from “summer_18” to “fall_19”, where “winter_19” represents 12/21/2018 - 03/20/2019 (the beginning of the year). Categorizing the data based on season, rather than week, allowed a more rounded overview of general trends, since things like holidays can skew data. Since we only had about a year’s worth of data and limited time, it was impractical to evaluate the data at a level of granularity such that holiday patterns would be visible.
+    We noticed that the summer 2018 and fall 2019 seasons had significantly lower sales than the rest of the seasons, but this can be explained by incomplete data for those seasons. Overall sales were highest in the winter of 2018. Food sales in particular rose over this time. This could be due to customers spending more time at home, thus dining out less.
+</h2>
+<iframe
+    src="http://midterm-site.azurewebsites.net/public/dashboard/2e929903-dde2-4091-b289-8905dd8cd06a"
+    frameborder="0"
+    width="1200"
+    height="1300"
+    allowtransparency
+></iframe>
+<h1 class="title">
+	Question 7
+</h1>
+<h2 class="subtitle">
+	In our analysis of the data, we found three major factors to be the primary sources of differences in customer engagement. The three factors of Household Size, Income Range, and Number of Children all showed noticeable differences in customer spending / engagement. For example, we see a peak of customer activity in the 50-74k income range.
+</h2>
+<iframe
+    src="http://midterm-site.azurewebsites.net/public/dashboard/efa16bd4-4462-4994-9ff0-e382fcabd5ce"
+    frameborder="0"
+    width="1200"
+    height="1600"
+    allowtransparency
+></iframe>
+{% endblock %}
