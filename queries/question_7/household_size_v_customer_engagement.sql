@@ -1,0 +1,15 @@
+/* duplicate of /question_6/household_size_v_customer_engagement.sql */
+
+SELECT
+    q.HH_SIZE, q.CHILDREN, q.INCOME_RANGE,
+    SUM(q.BASKET_SPEND) as TOTAL_SPEND,
+    COUNT(q.BASKET_SPEND) as BASKET_COUNT,
+    (SUM(q.BASKET_SPEND)/COUNT(q.BASKET_SPEND)) as AVERAGE_SPEND
+FROM (
+    SELECT SUM(t.SPEND) as BASKET_SPEND, h.HH_SIZE as HH_SIZE, h.CHILDREN as CHILDREN, h.INCOME_RANGE as INCOME_RANGE
+    FROM transactions t
+    JOIN households h ON h.HSHD_NUM = t.HSHD_NUM
+    WHERE t.SPEND IS NOT NULL
+    GROUP BY t.BASKET_NUM, h.HH_SIZE, h.CHILDREN, h.INCOME_RANGE
+) as q
+GROUP BY q.HH_SIZE, q.CHILDREN, q.INCOME_RANGE
