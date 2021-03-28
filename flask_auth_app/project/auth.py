@@ -97,7 +97,8 @@ def connect_db():
     username = 'dev'
     password = 'RFV1rfv!'
 
-    engine = sal.create_engine(f'mssql+pyodbc://{username}:{password}@{server_name}/{database_name}?driver=SQL Server?Trusted_Connection=yes')
+    # engine = sal.create_engine(f'mssql+pyodbc://{username}:{password}@{server_name}/{database_name}?driver=SQL Server?Trusted_Connection=yes')
+    engine = sal.create_engine(f'mssql+pyodbc://{username}:{password}@{server_name}/{database_name}?driver=ODBC Driver 17 for SQL Server?Trusted_Connection=yes')
     return engine
 
 
