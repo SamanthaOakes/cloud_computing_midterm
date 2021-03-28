@@ -92,8 +92,7 @@ def upload_file():
 
 def connect_db():
     server_name = 'cs5165-server.database.windows.net'
-    # database_name = 'midtermDB'
-    database_name = 'testDB'
+    database_name = 'midtermDB'
 
     username = 'dev'
     password = 'RFV1rfv!'
