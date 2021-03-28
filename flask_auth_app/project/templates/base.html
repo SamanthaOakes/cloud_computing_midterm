@@ -40,6 +40,10 @@
 							{% endif %}
 
 							{% if current_user.is_authenticated %}
+							<a href="{{ url_for('auth.upload') }}" class="navbar-item">
+								Upload Data
+							</a>
+
 							<a href="{{ url_for('auth.logout') }}" class="navbar-item">
 								Logout
 							</a>
