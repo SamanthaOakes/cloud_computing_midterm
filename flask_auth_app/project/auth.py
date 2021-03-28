@@ -1,12 +1,9 @@
 import datetime
 
-import pyodbc
 import sqlalchemy as sal
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import login_required, login_user, logout_user
-from sqlalchemy import create_engine
 from werkzeug.security import check_password_hash, generate_password_hash
-from werkzeug.utils import secure_filename
 
 from project.models import User
 
