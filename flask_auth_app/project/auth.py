@@ -1,8 +1,16 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash
-from werkzeug.security import generate_password_hash, check_password_hash
+import datetime
+
+import pyodbc
+import sqlalchemy as sal
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_login import login_required, login_user, logout_user
+from sqlalchemy import create_engine
+from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.utils import secure_filename
+
 from project.models import User
+
 from . import db
-from flask_login import login_user, logout_user, login_required
 
 auth = Blueprint('auth', __name__)
 
@@ -13,6 +21,12 @@ def login():
 @auth.route('/signup')
 def signup():
     return render_template('signup.html')
+
+@auth.route('/upload')
+def upload():
+    engine = connect_db()
+    tables = engine.table_names()
+    return render_template('upload.html', tables=tables)
 
 @auth.route('/logout')
 @login_required
@@ -60,3 +74,81 @@ def login_post():
 
     login_user(user, remember=remember)
     return redirect(url_for('main.profile'))
+
+
+@auth.route('/upload', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        print(request.form.get('tables'))
+        if request.form.get('tables') == None:
+            flash('Please Choose a Table to Add to')
+            return redirect(url_for('auth.upload'))
+        f = request.files['file']
+        dbtable = request.form.get('tables')
+        success = insert_file(f, dbtable)
+        if success:
+            return redirect(url_for('data.index'))
+        else:
+            flash('Something went wrong while uploading files')
+            return redirect(url_for('auth.upload'))
+
+
+def connect_db():
+    server_name = 'cs5165-server.database.windows.net'
+    # database_name = 'midtermDB'
+    database_name = 'testDB'
+
+    username = 'dev'
+    password = 'RFV1rfv!'
+
+    engine = sal.create_engine(f'mssql+pyodbc://{username}:{password}@{server_name}/{database_name}?driver=SQL Server?Trusted_Connection=yes')
+    return engine
+
+
+def insert_file(file, db_table):
+    engine = connect_db()
+    a = file.read()
+    row = a.decode("utf-8").split('\n')
+    table = []
+    for r in row:
+        table.append(str(r).split(','))
+    ints = ['HSHD_NUM', 'PRODUCT_NUM', 'BASKET_NUM', 'UNITS', 'WEEK_NUM', 'YEAR']
+    date = 'PURCHASE'
+    header = True
+    header_str = ''
+    Type = []
+    for row in table:
+        value_str = ''
+        count = 0
+        for col in row:
+            if header:
+                word = col.strip()
+                if word.endswith('_'):
+                    word = word[:-1]
+                header_str += f'{word}, '
+                if word in ints:
+                    Type.append(2)
+                elif word == date:
+                    Type.append(1)
+                else:
+                    Type.append(0)
+            else:
+                if Type[count] == 2:
+                    value_str += f'{col.strip()}, '
+                elif Type[count] == 1:
+                    date = datetime.datetime.strptime(col.strip(), '%d-%b-%y')
+                    value_str += f'\'{date.date()}\', '
+                else:
+                    value_str += f'\'{col.strip()}\', '
+                count += 1
+        if header:
+            header = False
+        else:
+            if value_str[:-2] != '':
+                try:
+                    engine.execute(f'INSERT INTO {db_table} ({header_str[:-2]}) VALUES ({value_str[:-2]})')
+                except Exception as e:
+                    print(e)
+                    print(value_str)
+                    return False
+    return True
